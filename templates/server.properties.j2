@@ -28,7 +28,7 @@
 
 # The id of the broker. This must be set to a unique integer for each broker.
 {%- if kafka_hosts | length > broker_index -%}
-broker.id={{kafka_host[broker_index].id|default(broker_index)}}
+broker.id={{kafka_hosts[broker_index].id|default(broker_index)}}
 {% else %}
 broker.id=0
 {% endif %}
@@ -51,8 +51,8 @@ listeners={{kafka_listeners}}
 # Hostname and port the broker will advertise to producers and consumers. If not set,
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
 # returned from java.net.InetAddress.getCanonicalHostName().
-{%- if kafka_hosts | length > broker_index and kafka_host[broker_index].advertised_listeners is defined -%}
-advertised.listeners={{kafka_host[broker_index].advertised_listeners}}
+{%- if kafka_hosts | length > broker_index and kafka_hosts[broker_index].advertised_listeners is defined -%}
+advertised.listeners={{kafka_hosts[broker_index].advertised_listeners}}
 {% else %}
 #advertised.listeners=PLAINTEXT://your.host.name:9092
 {% endif %}
