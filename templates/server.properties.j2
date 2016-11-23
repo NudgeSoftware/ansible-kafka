@@ -14,16 +14,24 @@
 # limitations under the License.
 # see kafka.server.KafkaConfig for additional details and defaults
 
+{%- set broker_index = 0 -%}
+{% for kafka_host in kafka_hosts %}
+  {%- if kafka_host.host is defined -%}
+    {%- set host = kafka_host.host -%}
+    {%- if host == ansible_fqdn or host in ansible_all_ipv4_addresses -%}
+      {%- set broker_index = loop.index0 -%}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
 ############################# Server Basics #############################
 
 # The id of the broker. This must be set to a unique integer for each broker.
-{% for url in kafka_hosts.split(',') %}
-  {%- set url_host = url.split(':')[0] -%}
-  {%- if url_host == ansible_fqdn or url_host in ansible_all_ipv4_addresses
-         or ( kafka_id is defined and loop.index0 == kafka_id | int ) -%}
-broker.id={{loop.index0}}
-  {% endif %}
-{% endfor %}
+{%- if kafka_hosts | length > broker_index -%}
+broker.id={{kafka_host[broker_index].id|default(broker_index)}}
+{% else %}
+broker.id=0
+{% endif %}
 
 ############################# Socket Server Settings #############################
 
@@ -33,21 +41,21 @@ broker.id={{loop.index0}}
 #     listeners = security_protocol://host_name:port
 #   EXAMPLE:
 #     listeners = PLAINTEXT://your.host.name:9092
+
 {% if kafka_listeners is defined %}
 listeners={{kafka_listeners}}
 {% else %}
-#listeners=PLAINTEXT://:9092
+#listeners=PLAINTEXT://:9092,TRACE://:9091
 {% endif %}
 
 # Hostname and port the broker will advertise to producers and consumers. If not set,
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
 # returned from java.net.InetAddress.getCanonicalHostName().
-{% if kafka_advertised_listeners is defined %}
-advertised.listeners={{kafka_advertised_listeners}}
+{%- if kafka_hosts | length > broker_index and kafka_host[broker_index].advertised_listeners is defined -%}
+advertised.listeners={{kafka_host[broker_index].advertised_listeners}}
 {% else %}
 #advertised.listeners=PLAINTEXT://your.host.name:9092
 {% endif %}
-
 
 # The number of threads handling network requests
 num.network.threads={{kafka_num_network_threads}}

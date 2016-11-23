@@ -2,13 +2,15 @@
 Installs [kafka](https://kafka.apache.org/)
 
 ##Requirements
-- kafka_hosts - comma separated list of host:port pairs in the cluster, defaults to 'ansible_fqdn:9092' for a single node
 - zookeeper_hosts - comma separated list of host:port pairs.
+- kafka_hosts - list of dictionaries  comma separated list of host:port pairs in the cluster, defaults to 'ansible_fqdn:9092' for a single node
+ - host - defaults to 'ansible_fqdn' for a single node
+ - id - optional: defines the id of the broker (if you don't want to use the index of the list)
+ - advertised_listeners - optional: defines a list of specific addresses for kafka to advertise to consumers/producers
+
 
 ##Optional
 - kafka_listeners - defines a specific address for kafka to listen on, by defaults listens on all interfaces
-- kafka_advertised_listeners - defines a specific address for kafka to advertise to consumers/producers
-- kafka_id - Id to be used if one can't or shouldn't be derived from kafka_hosts. This will happen if kafka_hosts doesn't contain the fqdn but an alias
 - monasca_log_level - Log level to be used for Kafka logs. Defaults to WARN
 - monasca_wait_for_period - The time in seconds for how long to wait for Kafka's port to be available after starting it. Default is 30 seconds.
 - run_mode - One of Deploy, Stop, Install, Start, or Use. The default is Deploy which will do Install, Configure, then Start.

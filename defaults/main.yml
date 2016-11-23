@@ -1,6 +1,7 @@
 ---
 apache_mirror: http://apache.mirrors.tds.net
-kafka_hosts: "{{ansible_fqdn}}:9092"
+kafka_hosts: 
+ - host: "{{ansible_fqdn}}"
 kafka_version: 0.10.1.0
 scala_version: 2.11
 run_mode: Deploy
