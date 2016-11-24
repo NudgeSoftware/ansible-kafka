@@ -20,6 +20,8 @@
     {%- set broker_index = loop.index0 %}
   {%- endif %}
 {%- endfor %}
+# broker_index {{broker_index|default(-1)}}
+# length {{kafka_hosts | length}}
 
 ############################# Server Basics #############################
 
