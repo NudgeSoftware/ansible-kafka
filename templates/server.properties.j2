@@ -14,10 +14,14 @@
 # limitations under the License.
 # see kafka.server.KafkaConfig for additional details and defaults
 
+# ansible_hostname = {{ansible_hostname}}
+# ansible_fqdn = {{ansible_fqdn}}
 {%- set broker_index = 0 %}
 {%- for kafka_host in kafka_hosts %}
   {%- set host = kafka_host.host %}
-  {%- if host == ansible_hostname or host == ansible_fqdn or host in ansible_all_ipv4_addresses %}
+  # index = {{loop.index0}}
+  # host = {{host}}
+  {% if host == ansible_hostname or host == ansible_fqdn or host in ansible_all_ipv4_addresses %}
     {%- set broker_index = loop.index0 %}
   {%- endif %}
 {%- endfor %}
