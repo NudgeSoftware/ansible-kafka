@@ -18,15 +18,17 @@
 {%- for kafka_host in kafka_hosts %}
   {% if kafka_host.host == ansible_fqdn or kafka_host.host in ansible_all_ipv4_addresses and broker_indicies|length == 0 %}
     {% set _ = broker_indicies.append(loop.index0) %}
+    # stuff {{broker_indicies}}
   {%- endif %}
 {%- endfor %}
-{% set broker_index = broker_indicies[0]|default(0) %}
+{% set broker_index = broker_indicies[0]|default(-1) %}
+# more stuff {{broker_index}}
 
 ############################# Server Basics #############################
 
 # The id of the broker. This must be set to a unique integer for each broker.
-{% if broker_index is defined and kafka_hosts|length>broker_index %}
-broker.id={{kafka_hosts[broker_index[0]].id|default(broker_index)}}
+{% if broker_index >= 0 and kafka_hosts|length>broker_index %}
+broker.id={{kafka_hosts[broker_index].id|default(broker_index)}}
 {% else %}
 broker.id=0
 {% endif %}
@@ -37,7 +39,7 @@ broker.id=0
 # it uses the value for "listeners" if configured.  Otherwise, it will use the value
 # returned from java.net.InetAddress.getCanonicalHostName().
 
-{% if broker_index is defined and kafka_hosts | length > broker_index and kafka_hosts[broker_index].advertised_listeners is defined %}
+{% if broker_index >= 0 and kafka_hosts | length > broker_index and kafka_hosts[broker_index].advertised_listeners is defined %}
 advertised.listeners={{kafka_hosts[broker_index].advertised_listeners}}
 {% else %}
 #advertised.listeners=PLAINTEXT://your.host.name:9092
