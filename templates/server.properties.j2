@@ -14,13 +14,11 @@
 # limitations under the License.
 # see kafka.server.KafkaConfig for additional details and defaults
 
-{%- set broker_index = 0 -%}
+{%- set broker_index = 0 %}
 {%- for kafka_host in kafka_hosts %}
-  {%- if kafka_host.host is defined -%}
-    {%- set host = kafka_host.host -%}
-    {%- if host == ansible_fqdn or host in ansible_all_ipv4_addresses -%}
-      {%- set broker_index = loop.index0 -%}
-    {%- endif %}
+  {%- set host = kafka_host.host %}
+  {%- if host == ansible_hostname or host == ansible_fqdn or host in ansible_all_ipv4_addresses %}
+    {%- set broker_index = loop.index0 %}
   {%- endif %}
 {%- endfor %}
 
