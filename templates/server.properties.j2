@@ -14,23 +14,21 @@
 # limitations under the License.
 # see kafka.server.KafkaConfig for additional details and defaults
 
-# ansible_fqdn -{{ansible_fqdn}}-
+{%- set broker_indicies = [] %}
 {%- for kafka_host in kafka_hosts %}
-# host -{{kafka_host.host}}-
   {% if kafka_host.host == ansible_fqdn or kafka_host.host in ansible_all_ipv4_addresses %}
-# index {{loop.index0}}
-    {%- set broker_index = loop.index0 %}
-# broker_index {{broker_index|default(-1)}}
+    {% set _ = broker_indicies.append(loop.index0) %}
   {%- endif %}
 {%- endfor %}
-# broker_index {{broker_index|default(-1)}}
-# length {{kafka_hosts | length}}
+{% if broker_indicies|length > 0 %}
+  {% set broker_index = broker_indicies[0] %}
+{%- endif %}
 
 ############################# Server Basics #############################
 
 # The id of the broker. This must be set to a unique integer for each broker.
-{% if broker_index is defined and kafka_hosts | length > broker_index %}
-broker.id={{kafka_hosts[broker_index].id|default(broker_index)}}
+{% if broker_index is defined and kafka_hosts|length>broker_index %}
+broker.id={{kafka_hosts[broker_index[0]].id|default(broker_index)}}
 {% else %}
 broker.id=0
 {% endif %}
