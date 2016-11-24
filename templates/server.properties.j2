@@ -16,13 +16,11 @@
 
 {%- set broker_indicies = [] %}
 {%- for kafka_host in kafka_hosts %}
-  {% if kafka_host.host == ansible_fqdn or kafka_host.host in ansible_all_ipv4_addresses %}
+  {% if kafka_host.host == ansible_fqdn or kafka_host.host in ansible_all_ipv4_addresses and broker_indicies|length == 0 %}
     {% set _ = broker_indicies.append(loop.index0) %}
   {%- endif %}
 {%- endfor %}
-{% if broker_indicies|length > 0 %}
-  {% set broker_index = broker_indicies[0] %}
-{%- endif %}
+{% set broker_index = broker_indicies[0]|default(0) %}
 
 ############################# Server Basics #############################
 
