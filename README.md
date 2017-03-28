@@ -3,10 +3,10 @@ Installs [kafka](https://kafka.apache.org/)
 
 ##Requirements
 - zookeeper_hosts - comma separated list of host:port pairs.
-- kafka_hosts - list of dictionaries  comma separated list of host:port pairs in the cluster, defaults to 'ansible_fqdn:9092' for a single node
+- kafka_hosts - list of dictionaries of kafka servers
  - host - defaults to 'ansible_fqdn' for a single node
  - id - optional: defines the id of the broker (if you don't want to use the index of the list)
- - advertised_listeners - optional: defines a list of specific addresses for kafka to advertise to consumers/producers
+- advertised_listeners - optional: defines a list of specific addresses for kafka to advertise to consumers/producers
 
 
 ##Optional
