@@ -6,7 +6,7 @@ Installs [kafka](https://kafka.apache.org/)
 - kafka_hosts - list of dictionaries of kafka servers
  - host - defaults to 'ansible_fqdn' for a single node
  - id - optional: defines the id of the broker (if you don't want to use the index of the list)
-- advertised_listeners - optional: defines a list of specific addresses for kafka to advertise to consumers/producers
+ - advertised_listeners - optional: defines a list of specific addresses for kafka to advertise to consumers/producers
 
 
 ##Optional
