@@ -1,6 +1,7 @@
 ---
 - name: Install OpenJDK
   apt: name={{kafka_java_version}} state=present
+  when: not skip_java
 
 - name: select download mirror from Apache
   register: test_var
