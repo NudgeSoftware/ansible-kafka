@@ -36,11 +36,11 @@
 
 - name: Create data_dir
   file: path={{item}} state=directory owner={{kafka_user}} group={{kafka_group}} mode=755
-  with_items: "{{kafka_data_dir}}"
+  loop: "{{kafka_data_dir}}"
 
 - name: Remove lost+found in the datadir
   file: path="{{item}}/lost+found" state=absent
-  with_items: "{{kafka_data_dir}}"
+  loop: "{{kafka_data_dir}}"
 
 - name: Create log_dir
   file: path={{kafka_log_dir}} state=directory owner={{kafka_user}} group={{kafka_group}} mode=755
